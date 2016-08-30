@@ -1,0 +1,37 @@
+{
+  "name": "restart",
+  "runtime": "nodejs4.3",
+  "description": "Restarts failed SQS processors",
+  "customName": false,
+  "customRole": false,
+  "handler": "functions/restart/handler.handler",
+  "timeout": 6,
+  "memorySize": 512,
+  "authorizer": {},
+  "custom": {
+    "excludePatterns": []
+  },
+  "endpoints": [],
+  "events": [
+    {
+      "name": "restart",
+      "type": "schedule",
+      "config": {
+        "schedule": "rate(1 minute)",
+        "enabled": true
+      }
+    }
+  ],
+  "environment": {
+    "SERVERLESS_PROJECT": "${project}",
+    "SERVERLESS_STAGE": "${stage}",
+    "SERVERLESS_REGION": "${region}",
+    "SERVERLESS_FUNCTION": "restart",
+    "PROCESSOR_FUNCTION": "process-msg",
+    "TOKENS_TABLE": "${tokensTable}"
+  },
+  "vpc": {
+    "securityGroupIds": [],
+    "subnetIds": []
+  }
+}

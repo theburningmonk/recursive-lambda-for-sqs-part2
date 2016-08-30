@@ -1,0 +1,29 @@
+{
+  "name": "process-msg",
+  "runtime": "nodejs4.3",
+  "description": "Processes messages from a SQS queue",
+  "customName": false,
+  "customRole": false,
+  "handler": "functions/process-msg/handler.handler",
+  "timeout": 30,
+  "memorySize": 512,
+  "authorizer": {},
+  "custom": {
+    "excludePatterns": [
+      "node_modules/aws-sdk"
+    ]
+  },
+  "endpoints": [],
+  "events": [],
+  "environment": {
+    "SERVERLESS_PROJECT": "${project}",
+    "SERVERLESS_STAGE": "${stage}",
+    "SERVERLESS_REGION": "${region}",
+    "SERVERLESS_FUNCTION": "process-msg",
+    "TOKENS_TABLE": "${tokensTable}"
+  },
+  "vpc": {
+    "securityGroupIds": [],
+    "subnetIds": []
+  }
+}

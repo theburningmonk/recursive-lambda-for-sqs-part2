@@ -1,0 +1,4 @@
+{
+  "region": "eu-west-1",
+  "tokensTable": "sqs-tokens-dev"
+}
