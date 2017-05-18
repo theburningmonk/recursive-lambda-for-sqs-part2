@@ -3,21 +3,17 @@
 const Promise  = require('bluebird');
 const co       = require('co');
 const AWS      = require('aws-sdk');
-AWS.config.region = process.env.SERVERLESS_REGION;
-
 const Lambda   = new AWS.Lambda();
 const DynamoDB = Promise.promisifyAll(new AWS.DynamoDB.DocumentClient());
 
-const project  = process.env.SERVERLESS_PROJECT;
-const funcName = process.env.PROCESSOR_FUNCTION;
-const table    = process.env.TOKENS_TABLE;
+const funcName = 'lambda-sqs-spike-dev-process-msg';
+const table    = 'sqs-tokens-dev';
 
 let invoke = co.wrap(function* (queueUrl, token) {
   let event = { queueUrl, token };
   let params = {
-    FunctionName: `${project}-${funcName}`,
+    FunctionName: funcName,
     InvocationType: 'Event',
-    Qualifier: process.env.SERVERLESS_STAGE,
     Payload: JSON.stringify(event)
   };
     

@@ -4,14 +4,11 @@ const Promise  = require('bluebird');
 const co       = require('co');
 const uuid     = require('node-uuid');
 const AWS      = require('aws-sdk');
-AWS.config.region = process.env.SERVERLESS_REGION;
-
 const Lambda   = new AWS.Lambda();
 const DynamoDB = Promise.promisifyAll(new AWS.DynamoDB.DocumentClient());
 
-const project  = process.env.SERVERLESS_PROJECT;
-const funcName = process.env.PROCESSOR_FUNCTION;
-const table    = process.env.TOKENS_TABLE;
+const funcName = 'lambda-sqs-spike-dev-process-msg';
+const table    = 'sqs-tokens-dev';
 
 let placeToken = co.wrap(function* (queueUrl) {
   let token = uuid.v4();
@@ -30,9 +27,8 @@ let placeToken = co.wrap(function* (queueUrl) {
 let invoke = co.wrap(function* (queueUrl, token) {
   let event = { queueUrl, token };
   let params = {
-    FunctionName: `${project}-${funcName}`,
+    FunctionName: funcName,
     InvocationType: 'Event',
-    Qualifier: process.env.SERVERLESS_STAGE,
     Payload: JSON.stringify(event)
   };
     
@@ -51,7 +47,7 @@ module.exports = co.wrap(function* (event) {
     .find(dim => dim.name === 'QueueName')
     .value;
 
-  let queueUrl = `https://sqs.${process.env.SERVERLESS_REGION}.amazonaws.com/${accountId}/${queueName}`;
+  let queueUrl = `https://sqs.${AWS.config.region}.amazonaws.com/${accountId}/${queueName}`;
 
   let token = yield placeToken(queueUrl);
 

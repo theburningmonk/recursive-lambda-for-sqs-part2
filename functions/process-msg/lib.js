@@ -3,16 +3,9 @@
 const Promise  = require('bluebird');
 const co       = require('co');
 const AWS      = require('aws-sdk');
-AWS.config.region = process.env.SERVERLESS_REGION;
-
 const Lambda   = new AWS.Lambda();
 const SQS      = Promise.promisifyAll(new AWS.SQS());
 const DynamoDB = Promise.promisifyAll(new AWS.DynamoDB.DocumentClient());
-
-// these come from s-function.json.environment vars
-const project  = process.env.SERVERLESS_PROJECT;
-const funcName = process.env.SERVERLESS_FUNCTION;
-const table    = process.env.TOKENS_TABLE;
 
 let sayHello = co.wrap(function* (msg) {
   console.log(`Hello, ${msg.Body} of message ID [${msg.MessageId}]`);
@@ -30,7 +23,7 @@ let deleteMessage = co.wrap(function* (msg, queueUrl) {
 
 let recurse = co.wrap(function* (event) {
   let params = {
-    FunctionName: `${project}-${funcName}`,
+    FunctionName: `lambda-sqs-spike-dev-process-msg`,
     InvocationType: 'Event',
     Qualifier: process.env.SERVERLESS_STAGE,
     Payload: JSON.stringify(event)
@@ -42,7 +35,7 @@ let recurse = co.wrap(function* (event) {
 
 let verifyToken = co.wrap(function* (queueUrl, token) {
   let params = {
-    TableName : table,
+    TableName : 'sqs-tokens-dev',
     Item: { 
       queue: queueUrl, 
       token: token, 

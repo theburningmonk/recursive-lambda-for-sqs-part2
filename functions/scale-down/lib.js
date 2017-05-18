@@ -4,12 +4,10 @@ const Promise  = require('bluebird');
 const co       = require('co');
 const uuid     = require('node-uuid');
 const AWS      = require('aws-sdk');
-AWS.config.region = process.env.SERVERLESS_REGION;
-
 const Lambda   = new AWS.Lambda();
 const DynamoDB = Promise.promisifyAll(new AWS.DynamoDB.DocumentClient());
 
-const table = process.env.TOKENS_TABLE;
+const table    = 'sqs-tokens-dev';
 
 let takeAwayToken = co.wrap(function* (queueUrl) {
   let token = uuid.v4();
@@ -56,7 +54,7 @@ module.exports = co.wrap(function* (event) {
     .find(dim => dim.name === 'QueueName')
     .value;
 
-  let queueUrl = `https://sqs.${process.env.SERVERLESS_REGION}.amazonaws.com/${accountId}/${queueName}`;
+  let queueUrl = `https://sqs.${AWS.config.region}.amazonaws.com/${accountId}/${queueName}`;
 
   yield takeAwayToken(queueUrl);
 });

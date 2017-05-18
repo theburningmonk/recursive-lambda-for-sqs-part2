@@ -1,18 +1,21 @@
 {
-  "name": "lambda-sqs-spike",
-  "version": "0.0.1",
-  "description": "A Serverless Project and its Serverless Plugin dependencies.",
-  "author": "me",
-  "license": "MIT",
-  "private": false,
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/"
+  "name": "recursive-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.5.2",
-    "bluebird": "^3.4.1",
+    "bluebird": "^3.5.0",
     "co": "^4.6.0",
-    "node-uuid": "^1.4.7"
+    "node-uuid": "^1.4.8"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.53.0",
+    "lodash": "^4.17.4",
+    "serverless": "^1.13.2"
   }
 }
